@@ -1,0 +1,12 @@
+name: jBank
+version: 1
+main: net.JaG.jBank.Main
+author: JaG
+depend: [Vault, LuckPerms]
+description: Per-group interest banking system
+commands:
+  bank:
+    description: jBank Base Command
+permissions:
+  bank.use:
+    description: Deposit and withdraw from bank

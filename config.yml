@@ -1,0 +1,4 @@
+prefix: "&6Bank &8>&7 "
+hoursToInterest: 3
+interest:
+  default: 0.10
