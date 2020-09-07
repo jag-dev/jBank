@@ -9,4 +9,5 @@ commands:
     description: jBank Base Command
 permissions:
   bank.use:
+    default: op
     description: Deposit and withdraw from bank

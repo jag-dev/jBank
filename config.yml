@@ -1,4 +1,42 @@
-prefix: "&6Bank &8>&7 "
 hoursToInterest: 3
 interest:
   default: 0.10
+chat:
+  prefix: "&6Bank &8>&7 "
+  bankBalance: "You have &a$<bal>&7 in your bank account"
+  depositSyntax: "Usage: /bank (deposit, d) <amount>"
+  withdrawSyntax: "Usage: /bank (withdraw, w) <amount>"
+  openBank: "Opening bank..."
+  depositMsg: "Deposited &a$<value>&7 into bank account"
+  withdrawMsg: "Withdrew &a$<value>&7 from bank account"
+  badValue: "Can only deposit number values"
+  noFunds: "Insufficient funds"
+  noAccess: "You do not have bank access"
+  helpCmd:
+  - "&6Bank &8>&7 &a[Bal: $<bal>]&f [Interest: <rate>%]"
+  - " "
+  - "&e/bank (deposit, d) <amount>&7 - Put money into bank"
+  - "&e/bank (withdraw, w) <amount>&7 - Take money from bank"
+gui:
+  balance:
+    name: "&6Bank Balance"
+    id: "266"
+    lore:
+    - "&7Balance: &a$<bal>"
+  interest:
+    name: "&fInterest Rate"
+    id: "340"
+    lore:
+    - "&7Current rate: &f<rate>"
+  deposit:
+    name: "&aDeposit"
+    id: "160:13"
+    lore:
+    - "&7Deposit full balance into"
+    - "&7account"
+  withdraw:
+    name: "&cWithdraw"
+    id: "160:14"
+    lore:
+    - "&7Withdraw full bank value into"
+    - "&7account"

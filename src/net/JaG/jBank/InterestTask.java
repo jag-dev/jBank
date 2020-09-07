@@ -36,7 +36,7 @@ public class InterestTask extends BukkitRunnable {
 				BankStorage.saveBanks();
 				double interestN = (BankStorage.getBanks().getConfigurationSection("banks").getDouble(key)-preInt);
 				String interest = String.format("%.2f", interestN);
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("").getString("prefix")) + 
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("chat").getString("prefix")) + 
 						"You gained " + ChatColor.GREEN + "$" + interest + ChatColor.GRAY + " as bank interest" );
 				
 				
