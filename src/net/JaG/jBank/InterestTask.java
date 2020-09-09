@@ -35,9 +35,10 @@ public class InterestTask extends BukkitRunnable {
 				} catch (UnhandledException e) { System.out.println("[Warning] Unable to apply interest at this time"); }
 				BankStorage.saveBanks();
 				double interestN = (BankStorage.getBanks().getConfigurationSection("banks").getDouble(key)-preInt);
+				String interestMsg = m.getConfig().getConfigurationSection("chat").getString("interestMsg");
 				String interest = String.format("%.2f", interestN);
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("chat").getString("prefix")) + 
-						"You gained " + ChatColor.GREEN + "$" + interest + ChatColor.GRAY + " as bank interest" );
+				interestMsg.replace("<interest>", interest);
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("chat").getString("prefix")) + interestMsg);
 				
 				
 			} else {

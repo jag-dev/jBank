@@ -90,6 +90,7 @@ public class Main extends JavaPlugin {
     	this.getConfig().addDefault("chat.openBank", "Opening bank...");
     	this.getConfig().addDefault("chat.depositMsg", "Deposited &a$<value>&7 into bank account");
     	this.getConfig().addDefault("chat.withdrawMsg", "Withdrew &a$<value>&7 from bank account");
+    	this.getConfig().addDefault("chat.interestMsg", "&7You gained &a$<interest>&7 as bank interest");
     	this.getConfig().addDefault("chat.badValue", "Can only deposit number values");
     	this.getConfig().addDefault("chat.noFunds", "Insufficient funds");
     	this.getConfig().addDefault("chat.noAccess", "You do not have bank access");

@@ -75,7 +75,7 @@ public class GUI implements Listener {
 		String[] w_itemData = w_rawItem.split(":", 2);
 		ItemStack with = new ItemStack(Material.getMaterial(Integer.parseInt(w_itemData[0])), 1, (byte) Integer.parseInt(w_itemData[1]));
 		ItemMeta withMeta = with.getItemMeta();
-		withMeta.setDisplayName(ChatColor.RED + "Withdraw");
+		withMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("gui.withdraw").getString("name")));
 		ArrayList<String> withLore = new ArrayList<String>();
 		for (String key : m.getConfig().getConfigurationSection("gui.withdraw").getStringList("lore")) {
 			withLore.add(ChatColor.translateAlternateColorCodes('&', key));
@@ -125,11 +125,14 @@ public class GUI implements Listener {
 		final ItemStack clicked = e.getCurrentItem();
 		if (clicked == null || clicked.getType() == Material.AIR) { return; }
 		if (clicked.getType() == Material.STAINED_GLASS_PANE && clicked.getItemMeta().hasLore()) {
+			
 			Player p = (Player) e.getWhoClicked();
-			if (clicked.getItemMeta().getDisplayName().contains("Deposit")) {
+			
+			
+			if (clicked.getItemMeta().getDisplayName().contains(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("gui.deposit").getString("name")))) {
 				p.performCommand("bank d " + Main.economy.getBalance(p));
 				p.closeInventory();
-			} else if (clicked.getItemMeta().getDisplayName().contains("Withdraw")) {
+			} else if (clicked.getItemMeta().getDisplayName().contains(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("gui.withdraw").getString("name")))) {
 				double bankAmount = BankStorage.getBanks().getConfigurationSection("banks").getDouble(p.getUniqueId().toString());
 				bankAmount = (double) Math.round(bankAmount * 100) / 100;
 				p.performCommand("bank w " + bankAmount);

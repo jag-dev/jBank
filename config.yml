@@ -9,6 +9,7 @@ chat:
   openBank: "Opening bank..."
   depositMsg: "Deposited &a$<value>&7 into bank account"
   withdrawMsg: "Withdrew &a$<value>&7 from bank account"
+  interestMsg: "&7You gained &a$<interest>&7 as bank interest"
   badValue: "Can only deposit number values"
   noFunds: "Insufficient funds"
   noAccess: "You do not have bank access"
