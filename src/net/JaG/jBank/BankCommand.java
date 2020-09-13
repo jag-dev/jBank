@@ -1,9 +1,15 @@
 package net.JaG.jBank;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,6 +20,8 @@ import net.milkbowl.vault.economy.Economy;
 
 public class BankCommand implements CommandExecutor {
 	private Economy eco = Main.economy;
+	private Main m;
+	public BankCommand(Main main) { this.m = main; }
 	
 	public static boolean isDouble(String s) { 
 		try { Double.parseDouble(s); } 
@@ -28,6 +36,22 @@ public class BankCommand implements CommandExecutor {
 		}
 		
 		return ChatColor.translateAlternateColorCodes('&', chatString);
+	}
+	
+	public OfflinePlayer getBalSpot(int spot) {
+		int topBalAmount = m.getConfig().getInt("topBalAmount");
+
+		List<OfflinePlayer> topBalances = Arrays.stream(Bukkit.getOfflinePlayers()).sorted((p1, p2) -> 
+			Double.compare(getBankBalance(p2.getUniqueId()), 
+			getBankBalance(p1.getUniqueId())))
+			.limit(topBalAmount)
+			.collect(Collectors.toList());
+		
+		return topBalances.get(spot);
+	}
+	
+	public double getBankBalance(UUID uuid) {
+		return BankStorage.getBanks().getConfigurationSection("banks").getDouble(uuid.toString());
 	}
 
 	@Override
@@ -75,6 +99,23 @@ public class BankCommand implements CommandExecutor {
 						String msg = doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("openBank"));
 						p.sendMessage(prefix + msg);
 						
+					} else if (args[0].equalsIgnoreCase("top")) {
+						p.sendMessage(prefix + "Top Bank Balances");
+						p.sendMessage(" ");
+							for (int i = 0; i < m.getConfig().getInt("topBalAmount"); i++) {
+								if (i >= BankStorage.getBanks().getConfigurationSection("banks").getKeys(false).size()) { continue; }
+								OfflinePlayer place = getBalSpot(i);
+								String topBalMsg = m.getConfig().getConfigurationSection("chat").getString("topBalFormat");
+								if (topBalMsg.contains("<player>")) { topBalMsg = topBalMsg.replace("<player>", place.getName()); }
+								if (topBalMsg.contains("<bal")) { topBalMsg = topBalMsg.replace("<bal>", Double.toString(getBankBalance(place.getUniqueId()))); }
+								if (topBalMsg.contains("<place>")) { topBalMsg = topBalMsg.replace("<place>", Integer.toString(i+1)); }
+								p.sendMessage(ChatColor.translateAlternateColorCodes('&', topBalMsg));
+							}
+						p.sendMessage(" ");
+					} else if (args[0].equalsIgnoreCase("reload") && p.hasPermission("bank.reload")) {
+						m.reloadConfig();
+						BankStorage.reloadBanks();
+						p.sendMessage(prefix + "Configuration reloaded");
 					} else {
 						p.sendMessage(prefix + "Invalid arguments");
 					}
@@ -83,6 +124,13 @@ public class BankCommand implements CommandExecutor {
 						if (args[0].equalsIgnoreCase("deposit") || args[0].equalsIgnoreCase("d")) {
 							if (isDouble(args[1])) {
 								double val = Double.parseDouble(args[1]);
+								if (args[1].contains(".")) {
+									String[] valCheck = args[1].split("\\.", 2);
+									 if (valCheck[1].length() >= 3) {
+										 p.sendMessage(prefix + "Only use two decimal places");
+										 return false;
+									 }
+								}
 								if (val <= pBal) {
 									eco.withdrawPlayer(p, p.getWorld().getName(), val);
 									pBank.set(p.getUniqueId().toString(), bankAmount + val);
@@ -98,6 +146,14 @@ public class BankCommand implements CommandExecutor {
 						} else if (args[0].equalsIgnoreCase("withdraw")|| args[0].equalsIgnoreCase("w")) {
 							if (isDouble(args[1])) {
 								double val = Double.parseDouble(args[1]);
+								if (args[1].contains(".")) {
+									String[] valCheck = args[1].split("\\.", 2);
+									 if (valCheck[1].length() >= 3) {
+										 p.sendMessage(prefix + "Only use two decimal places");
+										 return false;
+									 }
+								}
+								
 								if ((val < bankAmount) || (val == bankAmount)) {
 									eco.depositPlayer(p, p.getWorld().getName(), val);
 									pBank.set(p.getUniqueId().toString(), bankAmount - val);

@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
 		else { System.out.println("[WARNING] Could not load permissions"); }
 		Bukkit.getServer().getPluginManager().registerEvents(new BankListener(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(this), this);
-		getCommand("bank").setExecutor(new BankCommand());
+		getCommand("bank").setExecutor(new BankCommand(this));
 		loadBanks();
 		BankStorage.saveBanks();
 		configDefaults();
@@ -79,8 +79,10 @@ public class Main extends JavaPlugin {
     	defaultHelpCmd.add(" ");
     	defaultHelpCmd.add("&e/bank (deposit, d) <amount>&7 - Put money into bank");
     	defaultHelpCmd.add("&e/bank (withdraw, w) <amount>&7 - Take money from bank");
+    	defaultHelpCmd.add(" ");
     	
     	this.getConfig().addDefault("hoursToInterest", 3);
+    	this.getConfig().addDefault("topBalAmount", 10);
     	this.getConfig().addDefault("interest.default", 0.10);
     	
     	this.getConfig().addDefault("chat.prefix", "&6Bank &8>&7 ");
@@ -91,6 +93,7 @@ public class Main extends JavaPlugin {
     	this.getConfig().addDefault("chat.depositMsg", "Deposited &a$<value>&7 into bank account");
     	this.getConfig().addDefault("chat.withdrawMsg", "Withdrew &a$<value>&7 from bank account");
     	this.getConfig().addDefault("chat.interestMsg", "&7You gained &a$<interest>&7 as bank interest");
+    	this.getConfig().addDefault("chat.topBalFormat", "&6<place>) &7&o<player> - &a$<bal>");
     	this.getConfig().addDefault("chat.badValue", "Can only deposit number values");
     	this.getConfig().addDefault("chat.noFunds", "Insufficient funds");
     	this.getConfig().addDefault("chat.noAccess", "You do not have bank access");

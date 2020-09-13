@@ -11,3 +11,6 @@ permissions:
   bank.use:
     default: op
     description: Deposit and withdraw from bank
+  bank.reload:
+    default: op
+    description: Reload configuration
