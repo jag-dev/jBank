@@ -1,6 +1,6 @@
 name: jBank
 version: 1
-main: net.JaG.jBank.Main
+main: net.JaG.jBank.JBank
 author: JaG
 depend: [Vault, LuckPerms]
 description: Per-group interest banking system

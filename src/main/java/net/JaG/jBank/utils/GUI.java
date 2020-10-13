@@ -1,8 +1,9 @@
-package net.JaG.jBank;
+package net.JaG.jBank.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+import net.JaG.jBank.JBank;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,8 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.md_5.bungee.api.ChatColor;
 
 public class GUI implements Listener {
-	static Main m;
-	public GUI(Main main) {GUI.m = main; }
+	static JBank m;
+	public GUI(JBank main) {GUI.m = main; }
 	
 	@SuppressWarnings("deprecation")
 	public static void openGUI(Player p) {
@@ -130,7 +131,7 @@ public class GUI implements Listener {
 			
 			
 			if (clicked.getItemMeta().getDisplayName().contains(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("gui.deposit").getString("name")))) {
-				p.performCommand("bank d " + Main.economy.getBalance(p));
+				p.performCommand("bank d " + JBank.economy.getBalance(p));
 				p.closeInventory();
 			} else if (clicked.getItemMeta().getDisplayName().contains(ChatColor.translateAlternateColorCodes('&', m.getConfig().getConfigurationSection("gui.withdraw").getString("name")))) {
 				double bankAmount = BankStorage.getBanks().getConfigurationSection("banks").getDouble(p.getUniqueId().toString());

@@ -1,4 +1,4 @@
-package net.JaG.jBank;
+package net.JaG.jBank.cmd;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import net.JaG.jBank.utils.BankStorage;
+import net.JaG.jBank.utils.GUI;
+import net.JaG.jBank.JBank;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -19,9 +22,9 @@ import org.bukkit.entity.Player;
 import net.milkbowl.vault.economy.Economy;
 
 public class BankCommand implements CommandExecutor {
-	private Economy eco = Main.economy;
-	private Main m;
-	public BankCommand(Main main) { this.m = main; }
+	private Economy eco = JBank.economy;
+	private JBank m;
+	public BankCommand(JBank main) { this.m = main; }
 	
 	public static boolean isDouble(String s) { 
 		try { Double.parseDouble(s); } 
@@ -63,26 +66,26 @@ public class BankCommand implements CommandExecutor {
 				ConfigurationSection pBank = (ConfigurationSection) BankStorage.getBanks().getConfigurationSection("banks");
 				double bankAmount = BankStorage.getBanks().getConfigurationSection("banks").getDouble(p.getUniqueId().toString());
 				String bankAmountStr = String.format("%.2f", bankAmount);
-				String prefix = ChatColor.translateAlternateColorCodes('&', Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("prefix"));
+				String prefix = ChatColor.translateAlternateColorCodes('&', JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("prefix"));
 				if (args.length == 0) {
-					String bal = doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("bankBalance"), "<bal>", bankAmountStr);
+					String bal = doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("bankBalance"), "<bal>", bankAmountStr);
 					p.sendMessage(prefix + bal);
 				} else if (args.length == 1) {
 					if (args[0].equalsIgnoreCase("deposit") || args[0].equalsIgnoreCase("d")) {
-						String use = doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("depositSyntax"));
+						String use = doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("depositSyntax"));
 						p.sendMessage(prefix + use);
 					} else if (args[0].equalsIgnoreCase("withdraw")|| args[0].equalsIgnoreCase("w")) {
-						String use = doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("withdrawSyntax"));
+						String use = doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("withdrawSyntax"));
 						p.sendMessage(prefix + use);
 					}  else if (args[0].equalsIgnoreCase("help")) {
-						for (String key : Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getStringList("helpCmd")) {
+						for (String key : JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getStringList("helpCmd")) {
 							if (key.contains("<bal>") || key.contains("<rate>")) {
 								key = doChatMsg(key, "<bal>", bankAmountStr);
 								
 								ArrayList<Double> ints = new ArrayList<Double>();
-								for (String group : Main.getPlugin(Main.class).getConfig().getConfigurationSection("interest").getKeys(true)) {
+								for (String group : JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("interest").getKeys(true)) {
 									if (p.hasPermission("group." + group)) {
-										ints.add(Main.getPlugin(Main.class).getConfig().getConfigurationSection("interest").getDouble(group));
+										ints.add(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("interest").getDouble(group));
 									}
 								}
 								double max = (Collections.max(ints)*100);
@@ -96,7 +99,7 @@ public class BankCommand implements CommandExecutor {
 						}
 					} else if (args[0].equalsIgnoreCase("gui")) {
 						GUI.openGUI(p);
-						String msg = doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("openBank"));
+						String msg = doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("openBank"));
 						p.sendMessage(prefix + msg);
 						
 					} else if (args[0].equalsIgnoreCase("top")) {
@@ -135,13 +138,13 @@ public class BankCommand implements CommandExecutor {
 									eco.withdrawPlayer(p, p.getWorld().getName(), val);
 									pBank.set(p.getUniqueId().toString(), bankAmount + val);
 									BankStorage.saveBanks();
-									String msg = doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("depositMsg"), "<value>", Double.toString(val));
+									String msg = doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("depositMsg"), "<value>", Double.toString(val));
 									p.sendMessage(prefix + msg);
 								} else {
-									p.sendMessage(prefix + doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("noFunds")));
+									p.sendMessage(prefix + doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("noFunds")));
 								}
 							} else {
-								p.sendMessage(prefix + doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("badValue")));
+								p.sendMessage(prefix + doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("badValue")));
 							}
 						} else if (args[0].equalsIgnoreCase("withdraw")|| args[0].equalsIgnoreCase("w")) {
 							if (isDouble(args[1])) {
@@ -158,16 +161,16 @@ public class BankCommand implements CommandExecutor {
 									eco.depositPlayer(p, p.getWorld().getName(), val);
 									pBank.set(p.getUniqueId().toString(), bankAmount - val);
 									BankStorage.saveBanks();
-									String msg = doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("withdrawMsg"), "<value>", Double.toString(val));
+									String msg = doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("withdrawMsg"), "<value>", Double.toString(val));
 									p.sendMessage(prefix + msg);
 								} else {
-									p.sendMessage(prefix + doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("noFunds")));
+									p.sendMessage(prefix + doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("noFunds")));
 								}
 							} else {
-								p.sendMessage(prefix + doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("badValue")));
+								p.sendMessage(prefix + doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("badValue")));
 							}
 						}
-					} else { p.sendMessage(prefix + doChatMsg(Main.getPlugin(Main.class).getConfig().getConfigurationSection("chat").getString("noAccess"))); }
+					} else { p.sendMessage(prefix + doChatMsg(JBank.getPlugin(JBank.class).getConfig().getConfigurationSection("chat").getString("noAccess"))); }
 				}
 
 

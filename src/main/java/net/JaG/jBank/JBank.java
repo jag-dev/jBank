@@ -2,6 +2,11 @@ package net.JaG.jBank;
 
 import java.util.ArrayList;
 
+import net.JaG.jBank.cmd.BankCommand;
+import net.JaG.jBank.listener.BankListener;
+import net.JaG.jBank.utils.BankStorage;
+import net.JaG.jBank.utils.GUI;
+import net.JaG.jBank.utils.InterestTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,7 +15,7 @@ import net.luckperms.api.LuckPerms;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-public class Main extends JavaPlugin {
+public class JBank extends JavaPlugin {
 	public static Economy economy;
 	public Permission perms;
 	private BankStorage b;

@@ -1,15 +1,16 @@
-package net.JaG.jBank;
+package net.JaG.jBank.utils;
 
 import java.io.File;
 import java.io.IOException;
 
+import net.JaG.jBank.JBank;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class BankStorage {
 	private static File file;
 	private static FileConfiguration banks;
-	private Main m = Main.getPlugin(Main.class);
+	private JBank m = JBank.getPlugin(JBank.class);
 	
 	public void setup() {
 		if (!m.getDataFolder().exists()) { m.getDataFolder().mkdir(); }

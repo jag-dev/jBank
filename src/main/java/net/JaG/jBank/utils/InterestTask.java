@@ -1,9 +1,10 @@
-package net.JaG.jBank;
+package net.JaG.jBank.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 
+import net.JaG.jBank.JBank;
 import org.apache.commons.lang.UnhandledException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,8 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class InterestTask extends BukkitRunnable {
-	Main m;
-	public InterestTask(Main main) { this.m = main; }
+	JBank m;
+	public InterestTask(JBank main) { this.m = main; }
 	private ArrayList<Double> ints = new ArrayList<Double>();
 
 	@Override
